@@ -14,8 +14,10 @@ class ChartWeb extends Component {
     constructor(props){
         super(props);
 
+        const bgColor = ((props.config || {}).chart || {}).backgroundColor || 'transparent';
+
         this.state={
-            init:`<html>
+            init:`<html style='background-color: ${bgColor};'>
                     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0" />
                     <style media="screen" type="text/css">
                     #container {
@@ -47,7 +49,7 @@ class ChartWeb extends Component {
                         });
                         </script>
                     </head>
-                    <body>
+                    <body style='background-color: ${bgColor};'>
                         <div id="container">
                         </div>
                     </body>
@@ -75,7 +77,7 @@ class ChartWeb extends Component {
 
         config = JSON.parse(config)
         let concatHTML = `${this.state.init}${flattenObject(config)}${this.state.end}`;
-        
+
         return (
           <View style={this.props.style}>
               <WebView
@@ -87,6 +89,7 @@ class ChartWeb extends Component {
                   scalesPageToFit={true}
                   scrollEnabled={false}
                   automaticallyAdjustContentInsets={true}
+                  onLoadEnd={(this.props.config || {}).onWebViewLoadEnd}
                   {...this.props}
               />
           </View>
